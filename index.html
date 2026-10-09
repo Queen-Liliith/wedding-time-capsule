@@ -26,12 +26,10 @@ input:focus,textarea:focus{outline:2px solid #c5a981;outline-offset:1px}
 .hint{font:12px/1.6 Arial,sans-serif;color:#958373;text-align:left}
 button{border:0;padding:13px 16px;background:#a58a68;color:white;font:14px Arial,sans-serif;cursor:pointer}
 button:disabled{opacity:.5;cursor:wait}
-.secondary{margin:8px 5px 0}
 .primary{width:100%;margin-top:22px}
 #preview{font:13px/1.8 Arial,sans-serif;text-align:left;overflow-wrap:anywhere}
 #status{font:14px/1.6 Arial,sans-serif;margin-top:16px;overflow-wrap:anywhere}
 .small{font:12px/1.7 Arial,sans-serif;color:#988779;margin-top:24px}
-#audioPreview{width:100%;margin-top:12px}
 .heart{color:#bd927e}
 @media(max-width:400px){.card{padding:28px 18px}}
 </style>
@@ -44,7 +42,7 @@ button:disabled{opacity:.5;cursor:wait}
   <div class="names">Лілія &amp; Вова</div>
   <div class="date">10.10.2026 — 10.10.2030</div>
 
-  <p>Через чотири роки ми відкриємо цю скриньку, щоб прочитати ваші слова, почути ваші голоси та згадати цей особливий день.</p>
+  <p>Через чотири роки ми відкриємо цю скриньку, щоб прочитати ваші слова, побачити ваші фото та згадати цей особливий день.</p>
   <p style="color:#b59a70">— ✧ —</p>
   <p>Залиште нам послання в майбутнє <span class="heart">♡</span></p>
 
@@ -55,22 +53,13 @@ button:disabled{opacity:.5;cursor:wait}
     <label class="field-label" for="message">Ваші слова для нас</label>
     <textarea id="message" maxlength="5000" placeholder="Пишіть усе, що хочете залишити нам на згадку..." required></textarea>
 
-    <label class="field-label">Додайте фото, відео або аудіо</label>
+    <label class="field-label" for="files">Додайте фото, відео або аудіофайли</label>
     <input id="files" class="file-input" type="file"
       accept="image/jpeg,image/png,image/webp,image/gif,video/mp4,video/webm,video/quicktime,audio/webm,audio/mp4,audio/mpeg,audio/ogg,audio/wav,audio/x-m4a"
       multiple>
     <label for="files" class="file-button">📎 Обрати фото, відео або аудіо</label>
     <p class="hint">До 5 файлів загалом, кожен до 25 МБ.</p>
     <div id="preview" aria-live="polite"></div>
-
-    <section style="border-top:1px solid #e6d5bd;margin-top:22px;padding-top:12px">
-      <label class="field-label">Або запишіть голосове послання 🎙️</label>
-      <button type="button" class="secondary" id="record">🎙️ Записати</button>
-      <button type="button" class="secondary" id="stop" disabled>Зупинити</button>
-      <p id="recordStatus" class="hint" aria-live="polite">Дозвольте браузеру доступ до мікрофона.</p>
-      <audio id="audioPreview" controls hidden></audio>
-      <button type="button" class="secondary" id="removeAudio" hidden>Видалити запис</button>
-    </section>
 
     <button class="primary" id="submitButton" type="submit">Запечатати послання ♡</button>
   </form>
@@ -81,27 +70,16 @@ button:disabled{opacity:.5;cursor:wait}
 
 <script>
 const SUPABASE_URL = "https://xpajympmqhaeovhkkana.supabase.co";
-const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhwYWp5bXBtcWhhZW92aGtrYW5hIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE1MzE0NjcsImV4cCI6MjEwNzEwNzQ2N30.2PoKYpD1Gj0SrnLtOEP4gp8skOciCTmJphn_9J1b8PQ";
+const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhwajF5bXBtcWhhZW92aGtrYW5hIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE1MzE0NjcsImV4cCI6MjEwNzEwNzQ2N30.2PoKYpD1Gj0SrnLtOEP4gp8skOciCTmJphn_9J1b8PQ";
 
 const form = document.getElementById("messageForm");
 const filesInput = document.getElementById("files");
 const preview = document.getElementById("preview");
 const status = document.getElementById("status");
 const submitButton = document.getElementById("submitButton");
-const recordButton = document.getElementById("record");
-const stopButton = document.getElementById("stop");
-const recordStatus = document.getElementById("recordStatus");
-const audioPreview = document.getElementById("audioPreview");
-const removeAudio = document.getElementById("removeAudio");
 
 const MAX_SIZE = 25 * 1024 * 1024;
 const MAX_FILES = 5;
-
-let recorder = null;
-let stream = null;
-let audioBlob = null;
-let audioUrl = null;
-let chunks = [];
 
 const allowedTypes = [
   "image/jpeg", "image/png", "image/webp", "image/gif",
@@ -114,124 +92,40 @@ function selectedFiles() {
   return [...filesInput.files];
 }
 
-function showFiles() {
+filesInput.addEventListener("change", () => {
+  const files = selectedFiles();
   preview.replaceChildren();
+  status.textContent = "";
 
-  selectedFiles().forEach(file => {
+  if (files.length > MAX_FILES ||
+      files.some(f => !allowedTypes.includes(f.type) || f.size > MAX_SIZE)) {
+    filesInput.value = "";
+    status.textContent = "Оберіть до 5 файлів підтримуваного формату, кожен до 25 МБ.";
+    return;
+  }
+
+  files.forEach(file => {
     const item = document.createElement("div");
     item.textContent = `📎 ${file.name} (${(file.size / 1024 / 1024).toFixed(1)} МБ)`;
     preview.appendChild(item);
   });
-
-  if (audioBlob) {
-    const item = document.createElement("div");
-    item.textContent = "🎙️ Голосове повідомлення записано";
-    preview.appendChild(item);
-  }
-}
-
-filesInput.addEventListener("change", () => {
-  const files = selectedFiles();
-
-  if (files.length > MAX_FILES ||
-      files.some(f => !allowedTypes.includes(f.type) || f.size > MAX_SIZE) ||
-      files.length + (audioBlob ? 1 : 0) > MAX_FILES) {
-    filesInput.value = "";
-    showFiles();
-    status.textContent = "Оберіть до 5 підтримуваних файлів, кожен до 25 МБ.";
-    return;
-  }
-
-  status.textContent = "";
-  showFiles();
-});
-
-recordButton.addEventListener("click", async () => {
-  if (!navigator.mediaDevices?.getUserMedia || !window.MediaRecorder) {
-    recordStatus.textContent = "Запис недоступний. Спробуйте завантажити аудіофайл.";
-    return;
-  }
-
-  try {
-    stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-    chunks = [];
-
-    const mimeType = [
-      "audio/webm;codecs=opus", "audio/webm", "audio/mp4"
-    ].find(type => MediaRecorder.isTypeSupported(type));
-
-    recorder = new MediaRecorder(stream, mimeType ? { mimeType } : {});
-
-    recorder.ondataavailable = event => {
-      if (event.data.size) chunks.push(event.data);
-    };
-
-    recorder.onstop = () => {
-      audioBlob = new Blob(chunks, { type: recorder.mimeType || "audio/webm" });
-
-      if (audioUrl) URL.revokeObjectURL(audioUrl);
-      audioUrl = URL.createObjectURL(audioBlob);
-      audioPreview.src = audioUrl;
-      audioPreview.hidden = false;
-      removeAudio.hidden = false;
-
-      recordStatus.textContent = "Запис готовий. Прослухайте його перед відправленням.";
-      stream?.getTracks().forEach(track => track.stop());
-      stream = null;
-      showFiles();
-    };
-
-    recorder.start();
-    recordButton.disabled = true;
-    stopButton.disabled = false;
-    recordStatus.textContent = "Запис триває…";
-  } catch {
-    stream?.getTracks().forEach(track => track.stop());
-    stream = null;
-    recordStatus.textContent = "Не вдалося отримати доступ до мікрофона.";
-  }
-});
-
-stopButton.addEventListener("click", () => {
-  if (recorder?.state === "recording") recorder.stop();
-  recordButton.disabled = false;
-  stopButton.disabled = true;
-});
-
-removeAudio.addEventListener("click", () => {
-  audioBlob = null;
-  audioPreview.pause();
-  audioPreview.removeAttribute("src");
-  audioPreview.hidden = true;
-  removeAudio.hidden = true;
-
-  if (audioUrl) URL.revokeObjectURL(audioUrl);
-  audioUrl = null;
-
-  recordStatus.textContent = "Запис видалено.";
-  showFiles();
 });
 
 form.addEventListener("submit", async event => {
   event.preventDefault();
 
-  if (
-    !SUPABASE_URL.startsWith("https://") ||
-    SUPABASE_URL.includes("ВСТАВТЕ") ||
-    !SUPABASE_ANON_KEY.trim() ||
-    SUPABASE_ANON_KEY.includes("ВСТАВТЕ")
-  ) {
+  if (!SUPABASE_URL.startsWith("https://") ||
+      SUPABASE_URL.includes("ВСТАВТЕ") ||
+      !SUPABASE_ANON_KEY.trim() ||
+      SUPABASE_ANON_KEY.includes("ВСТАВТЕ")) {
     status.textContent = "Спочатку налаштуйте підключення до Supabase.";
     return;
   }
 
   const files = selectedFiles();
 
-  if (
-    files.length + (audioBlob ? 1 : 0) > MAX_FILES ||
-    files.some(f => !allowedTypes.includes(f.type) || f.size > MAX_SIZE) ||
-    (audioBlob && audioBlob.size > MAX_SIZE)
-  ) {
+  if (files.length > MAX_FILES ||
+      files.some(f => !allowedTypes.includes(f.type) || f.size > MAX_SIZE)) {
     status.textContent = "Перевірте файли: до 5 файлів, кожен до 25 МБ.";
     return;
   }
@@ -239,13 +133,7 @@ form.addEventListener("submit", async event => {
   const data = new FormData();
   data.append("name", document.getElementById("name").value.trim());
   data.append("message", document.getElementById("message").value.trim());
-
   files.forEach(file => data.append("files", file));
-
-  if (audioBlob) {
-    const ext = audioBlob.type.includes("mp4") ? "mp4" : "webm";
-    data.append("files", audioBlob, `voice-message.${ext}`);
-  }
 
   submitButton.disabled = true;
   status.textContent = "Запечатуємо ваше послання…";
@@ -271,19 +159,6 @@ form.addEventListener("submit", async event => {
 
     form.reset();
     preview.replaceChildren();
-
-    if (audioUrl) URL.revokeObjectURL(audioUrl);
-    audioUrl = null;
-    audioBlob = null;
-
-    audioPreview.pause();
-    audioPreview.removeAttribute("src");
-    audioPreview.hidden = true;
-    removeAudio.hidden = true;
-    recordButton.disabled = false;
-    stopButton.disabled = true;
-
-    recordStatus.textContent = "Можете записати нове голосове послання.";
     status.textContent = "♡ Ваше послання збережено. Дякуємо за теплі слова!";
   } catch (error) {
     status.textContent = error.message || "Не вдалося зберегти послання. Спробуйте ще раз.";
