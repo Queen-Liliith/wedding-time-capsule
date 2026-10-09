@@ -115,9 +115,9 @@ form.addEventListener("submit", async event => {
   event.preventDefault();
 
   if (!SUPABASE_URL.startsWith("https://") ||
-      SUPABASE_URL.includes("ВСТАВТЕ") ||
+      SUPABASE_URL.includes("https://xpajympmqhaeovhkkana.supabase.co") ||
       !SUPABASE_ANON_KEY.trim() ||
-      SUPABASE_ANON_KEY.includes("ВСТАВТЕ")) {
+      SUPABASE_ANON_KEY.includes("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhwYWp5bXBtcWhhZW92aGtrYW5hIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE1MzE0NjcsImV4cCI6MjEwNzEwNzQ2N30.2PoKYpD1Gj0SrnLtOEP4gp8skOciCTmJphn_9J1b8PQ")) {
     status.textContent = "Спочатку налаштуйте підключення до Supabase.";
     return;
   }
