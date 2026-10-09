@@ -1,0 +1,221 @@
+
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Наша капсула часу 💌</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 30px 16px;
+      background: #f8f3ed;
+      color: #594b42;
+      font-family: Georgia, serif;
+    }
+    main {
+      max-width: 700px;
+      margin: 35px auto;
+      padding: 28px;
+      background: #fffdf9;
+      border: 1px solid #e5d5c5;
+      border-radius: 18px;
+      box-shadow: 0 8px 30px #79614b12;
+    }
+    h1 { text-align: center; font-weight: normal; }
+    p { line-height: 1.6; }
+    input, button {
+      box-sizing: border-box;
+      width: 100%;
+      padding: 13px;
+      margin: 7px 0;
+      border-radius: 9px;
+      font: inherit;
+    }
+    input { border: 1px solid #d8c5b3; background: white; }
+    button {
+      border: 0;
+      background: #927761;
+      color: white;
+      cursor: pointer;
+    }
+    button:disabled { opacity: .6; cursor: wait; }
+    .card {
+      padding: 18px 0;
+      border-bottom: 1px solid #eadfd4;
+      overflow-wrap: anywhere;
+    }
+    .muted { color: #8c7b6c; font-size: .9rem; }
+    .hidden { display: none; }
+    img { max-width: 100%; border-radius: 10px; margin-top: 10px; }
+    a { color: #795e48; }
+    #status { white-space: pre-wrap; }
+  </style>
+</head>
+<body>
+<main>
+  <h1>Наша капсула часу 💌</h1>
+  <p style="text-align:center">Лілія &amp; Вова · 10.10.2026</p>
+
+  <section id="login">
+    <p>Увійдіть, щоб прочитати послання наших гостей.</p>
+    <form id="loginForm">
+      <input id="email" type="email" placeholder="Email" required
+        autocomplete="username">
+      <input id="password" type="password" placeholder="Пароль" required
+        autocomplete="current-password">
+      <button id="loginButton" type="submit">Увійти</button>
+    </form>
+  </section>
+
+  <section id="capsule" class="hidden">
+    <p>Вітаємо у вашій капсулі 🤍</p>
+    <button id="refreshButton" type="button">Оновити послання</button>
+    <button id="logoutButton" type="button">Вийти</button>
+    <div id="messages"></div>
+  </section>
+  <p id="status" role="status"></p>
+</main>
+
+<script type="module">
+  import { createClient } from
+    'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
+
+  const SUPABASE_URL = 'https://xpajympmqhaeovhkkana.supabase.co';
+
+  // Встав сюди свій публічний anon key із Supabase → Project Settings → API.
+  const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhwYWp5bXBtcWhhZW92aGtrYW5hIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE1MzE0NjcsImV4cCI6MjEwNzEwNzQ2N30.2PoKYpD1Gj0SrnLtOEP4gp8skOciCTmJphn_9J1b8PQ';
+
+  const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+  const login = document.querySelector('#login');
+  const capsule = document.querySelector('#capsule');
+  const status = document.querySelector('#status');
+  const messages = document.querySelector('#messages');
+  const loginButton = document.querySelector('#loginButton');
+
+  document.querySelector('#loginForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    loginButton.disabled = true;
+    status.textContent = 'Входимо...';
+
+    try {
+      const { error } = await supabase.auth.signInWithPassword({
+        email: document.querySelector('#email').value.trim(),
+        password: document.querySelector('#password').value
+      });
+      if (error) throw error;
+      await showCapsule();
+    } catch (err) {
+      status.textContent = 'Не вдалося увійти: ' + err.message;
+    } finally {
+      loginButton.disabled = false;
+    }
+  });
+
+  async function showCapsule() {
+    const { data: { session } } = await supabase.auth.getSession();
+    if (!session) {
+      login.classList.remove('hidden');
+      capsule.classList.add('hidden');
+      return;
+    }
+    login.classList.add('hidden');
+    capsule.classList.remove('hidden');
+    await loadMessages();
+  }
+
+  async function loadMessages() {
+    status.textContent = 'Завантажуємо послання...';
+    messages.replaceChildren();
+
+    const { data, error } = await supabase
+      .from('guest_messages')
+      .select('guest_name, message, file_paths, created_at')
+      .order('created_at', { ascending: true });
+
+    if (error) {
+      status.textContent = 'Не вдалося завантажити послання: ' + error.message;
+      return;
+    }
+
+    if (!data?.length) {
+      status.textContent = 'Послань поки немає.';
+      return;
+    }
+
+    status.textContent = `Знайдено послань: ${data.length}`;
+
+    for (const item of data) {
+      const card = document.createElement('article');
+      card.className = 'card';
+
+      const name = document.createElement('h3');
+      name.textContent = item.guest_name || 'Без імені';
+      card.append(name);
+
+      const date = document.createElement('p');
+      date.className = 'muted';
+      date.textContent = item.created_at
+        ? new Date(item.created_at).toLocaleString('uk-UA')
+        : '';
+      card.append(date);
+
+      const message = document.createElement('p');
+      message.textContent = item.message || '';
+      card.append(message);
+
+      const paths = Array.isArray(item.file_paths) ? item.file_paths : [];
+      for (const path of paths) {
+        const { data: file, error: fileError } =
+          await supabase.storage.from('guest-media').createSignedUrl(path, 300);
+
+        if (fileError || !file?.signedUrl) {
+          const note = document.createElement('p');
+          note.className = 'muted';
+          note.textContent = 'Не вдалося відкрити вкладення.';
+          card.append(note);
+          continue;
+        }
+
+        const link = document.createElement('a');
+        link.href = file.signedUrl;
+        link.target = '_blank';
+        link.rel = 'noopener noreferrer';
+        link.textContent = 'Відкрити вкладення';
+        card.append(link);
+
+        if (/\.(png|jpe?g|gif|webp|avif)(\?|$)/i.test(path)) {
+          const img = document.createElement('img');
+          img.src = file.signedUrl;
+          img.alt = 'Фото від гостя';
+          img.loading = 'lazy';
+          card.append(img);
+        }
+      }
+      messages.append(card);
+    }
+  }
+
+  document.querySelector('#refreshButton')
+    .addEventListener('click', loadMessages);
+
+  document.querySelector('#logoutButton').addEventListener('click', async () => {
+    await supabase.auth.signOut();
+    messages.replaceChildren();
+    capsule.classList.add('hidden');
+    login.classList.remove('hidden');
+    status.textContent = 'Ви вийшли з акаунта.';
+  });
+
+  supabase.auth.onAuthStateChange((_event, session) => {
+    if (!session) {
+      login.classList.remove('hidden');
+      capsule.classList.add('hidden');
+    }
+  });
+
+  await showCapsule();
+</script>
+</body>
+</html>
