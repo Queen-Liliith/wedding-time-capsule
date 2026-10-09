@@ -20,9 +20,10 @@ label.field-label{display:block;text-align:left;font-size:14px;margin:18px 0 8px
 input[type=text],textarea{display:block;width:100%;padding:13px;border:1px solid #e2d3c0;border-radius:3px;background:#fffefa;color:#51443c;font:15px Arial,sans-serif}
 textarea{min-height:130px;resize:vertical}
 input:focus,textarea:focus{outline:2px solid #c5a981;outline-offset:1px}
-.file-input{display:none}
+.file-input{position:absolute;width:1px;height:1px;opacity:0;overflow:hidden}
 .file-button{display:block;padding:14px 12px;margin-top:10px;background:#a58a68;color:white;text-align:center;cursor:pointer;font:14px Arial,sans-serif}
 .file-button:hover,button:hover{background:#876c4f}
+.file-input:focus + .file-button{outline:2px solid #c5a981}
 .hint{font:12px/1.6 Arial,sans-serif;color:#958373;text-align:left}
 button{border:0;padding:13px 16px;background:#a58a68;color:white;font:14px Arial,sans-serif;cursor:pointer}
 button:disabled{opacity:.5;cursor:wait}
@@ -70,7 +71,7 @@ button:disabled{opacity:.5;cursor:wait}
 
 <script>
 const SUPABASE_URL = "https://xpajympmqhaeovhkkana.supabase.co";
-const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhwajF5bXBtcWhhZW92aGtrYW5hIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE1MzE0NjcsImV4cCI6MjEwNzEwNzQ2N30.2PoKYpD1Gj0SrnLtOEP4gp8skOciCTmJphn_9J1b8PQ";
+const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhwYWp5bXBtcWhhZW92aGtrYW5hIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE1MzE0NjcsImV4cCI6MjEwNzEwNzQ2N30.2PoKYpD1Gj0SrnLtOEP4gp8skOciCTmJphn_9J1b8PQ";
 
 const form = document.getElementById("messageForm");
 const filesInput = document.getElementById("files");
@@ -114,10 +115,11 @@ filesInput.addEventListener("change", () => {
 form.addEventListener("submit", async event => {
   event.preventDefault();
 
-  if (!SUPABASE_URL.startsWith("https://") ||
-      SUPABASE_URL.includes("https://xpajympmqhaeovhkkana.supabase.co") ||
-      !SUPABASE_ANON_KEY.trim() ||
-      SUPABASE_ANON_KEY.includes("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhwYWp5bXBtcWhhZW92aGtrYW5hIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE1MzE0NjcsImV4cCI6MjEwNzEwNzQ2N30.2PoKYpD1Gj0SrnLtOEP4gp8skOciCTmJphn_9J1b8PQ")) {
+  if (
+    !SUPABASE_URL.startsWith("https://") ||
+    !SUPABASE_URL.endsWith(".supabase.co") ||
+    !SUPABASE_ANON_KEY.trim()
+  ) {
     status.textContent = "Спочатку налаштуйте підключення до Supabase.";
     return;
   }
@@ -140,7 +142,7 @@ form.addEventListener("submit", async event => {
 
   try {
     const response = await fetch(
-      `${SUPABASE_URL.replace(/\/$/, "")}/functions/v1/submit-message`,
+      `${SUPABASE_URL}/functions/v1/submit-message`,
       {
         method: "POST",
         headers: {
