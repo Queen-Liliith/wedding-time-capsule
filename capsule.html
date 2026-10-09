@@ -2,294 +2,201 @@
 <!DOCTYPE html>
 <html lang="uk">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Наша капсула часу 💌</title>
-  <style>
-    * { box-sizing: border-box; }
-    body {
-      margin: 0;
-      padding: 24px 12px;
-      background: #f8f3ed;
-      color: #594b42;
-      font-family: Georgia, serif;
-    }
-    main {
-      max-width: 700px;
-      margin: 20px auto;
-      padding: 28px;
-      background: #fffdf9;
-      border: 1px solid #e5d5c5;
-      border-radius: 18px;
-      box-shadow: 0 8px 30px #79614b12;
-    }
-    h1 { text-align: center; font-weight: normal; }
-    .subtitle { text-align: center; }
-    input, button {
-      width: 100%;
-      padding: 13px;
-      margin: 7px 0;
-      border-radius: 9px;
-      font: inherit;
-    }
-    input { border: 1px solid #d8c5b3; background: white; }
-    button {
-      border: 0;
-      background: #927761;
-      color: white;
-      cursor: pointer;
-    }
-    button:disabled { opacity: .6; cursor: wait; }
-    .hidden { display: none !important; }
-    .muted { color: #8c7b6c; font-size: .9rem; }
-    #status { white-space: pre-wrap; }
-    .guest {
-      margin: 12px 0;
-      border: 1px solid #e5d5c5;
-      border-radius: 12px;
-      overflow: hidden;
-      background: #fffaf4;
-    }
-    .guest summary {
-      padding: 17px;
-      cursor: pointer;
-      font-size: 1.05rem;
-      overflow-wrap: anywhere;
-    }
-    .guest summary::marker { color: #927761; }
-    .guest-content { padding: 0 17px 18px; overflow-wrap: anywhere; }
-    .guest-content img {
-      display: block;
-      max-width: 100%;
-      height: auto;
-      margin: 12px 0;
-      border-radius: 10px;
-    }
-    .file-link { display: inline-block; margin: 8px 0; color: #795e48; }
-    .lock {
-      text-align: center;
-      padding: 28px 8px;
-    }
-    .lock-icon { font-size: 48px; }
-    @media (max-width: 480px) {
-      main { padding: 20px 16px; }
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Наша капсула часу 💌</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;padding:24px 12px;background:#f8f3ed;color:#594b42;font-family:Georgia,serif}
+main{max-width:700px;margin:20px auto;padding:28px;background:#fffdf9;border:1px solid #e5d5c5;border-radius:18px;box-shadow:0 8px 30px #79614b12}
+h1{text-align:center;font-weight:normal}
+.subtitle{text-align:center}
+input,button{width:100%;padding:13px;margin:7px 0;border-radius:9px;font:inherit}
+input{border:1px solid #d8c5b3;background:white}
+button{border:0;background:#927761;color:white;cursor:pointer}
+button:disabled{opacity:.6;cursor:wait}
+.hidden{display:none!important}
+.muted{color:#8c7b6c;font-size:.9rem}
+#status{white-space:pre-wrap}
+.lock{text-align:center;padding:20px 5px}
+.lock-icon{font-size:48px}
+.guest{margin:12px 0;border:1px solid #e5d5c5;border-radius:12px;overflow:hidden;background:#fffaf4}
+.guest summary{padding:17px;cursor:pointer;font-size:1.05rem;overflow-wrap:anywhere}
+.guest-content{padding:0 17px 18px;overflow-wrap:anywhere}
+.guest-content img{display:block;max-width:100%;height:auto;margin:12px 0;border-radius:10px}
+.file-link{display:inline-block;margin:8px 0;color:#795e48}
+</style>
 </head>
 <body>
 <main>
-  <h1>Наша капсула часу 💌</h1>
-  <p class="subtitle">Лілія &amp; Вова · 10.10.2026</p>
+<h1>Наша капсула часу 💌</h1>
+<p class="subtitle">Лілія &amp; Вова · 10.10.2026</p>
 
-  <section id="locked" class="lock hidden">
-    <div class="lock-icon">🔒</div>
-    <h2>Наші спогади ще закриті</h2>
-    <p>Усі слова, фото та побажання гостей чекають свого часу.</p>
-    <p><strong>Відкриття капсули — 10 жовтня 2030 року</strong></p>
-  </section>
+<section id="login">
+<p>Увійдіть, щоб переглянути послання гостей.</p>
+<form id="loginForm">
+<input id="email" type="email" placeholder="Email" required autocomplete="username">
+<input id="password" type="password" placeholder="Пароль" required autocomplete="current-password">
+<button id="loginButton" type="submit">Увійти</button>
+</form>
+</section>
 
-  <section id="login">
-    <p>Увійдіть, щоб переглянути послання гостей.</p>
-    <form id="loginForm">
-      <input id="email" type="email" placeholder="Email" required autocomplete="username">
-      <input id="password" type="password" placeholder="Пароль" required autocomplete="current-password">
-      <button id="loginButton" type="submit">Увійти</button>
-    </form>
-  </section>
+<section id="locked" class="lock hidden">
+<div class="lock-icon">🔒</div>
+<h2>Капсула часу</h2>
+<p>Усі слова, фото та побажання гостей чекають на вас.</p>
+<button id="openButton" type="button">Відкрити капсулу 💌</button>
+</section>
 
-  <section id="capsule" class="hidden">
-    <p>Ваші спогади 🤍 Натисніть на ім'я, щоб відкрити послання.</p>
-    <button id="refreshButton" type="button">Оновити послання</button>
-    <div id="messages"></div>
-    <button id="logoutButton" type="button">Вийти</button>
-  </section>
-  <p id="status" role="status"></p>
+<section id="capsule" class="hidden">
+<p>Ваші спогади 🤍 Натисніть на ім'я, щоб відкрити послання.</p>
+<button id="refreshButton" type="button">Оновити послання</button>
+<div id="messages"></div>
+<button id="closeButton" type="button">Знову закрити капсулу 🔒</button>
+<button id="logoutButton" type="button">Вийти</button>
+</section>
+<p id="status" role="status"></p>
 </main>
 
 <script type="module">
-  import { createClient } from
-    'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
+import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
 
-  const SUPABASE_URL = 'https://xpajympmqhaeovhkkana.supabase.co';
-  const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhwYWp5bXBtcWhhZW92a2trYW5hIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE1MzE0NjcsImV4cCI6MjEwNzEwNzQ2N30.2PoKYpD1Gj0SrnLtOEP4gp8skOciCTmJphn_9J1b8PQ';
+const SUPABASE_URL = 'https://xpajympmqhaeovhkkana.supabase.co';
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhwajV5bXBtcWhhZW92a2trYW5hIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE1MzE0NjcsImV4cCI6MjEwNzEwNzQ2N30.2PoKYpD1Gj0SrnLtOEP4gp8skOciCTmJphn_9J1b8PQ';
 
-  const OPEN_DATE = new Date('2030-10-10T00:00:00+03:00');
-  const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+const login = document.querySelector('#login');
+const locked = document.querySelector('#locked');
+const capsule = document.querySelector('#capsule');
+const status = document.querySelector('#status');
+const messages = document.querySelector('#messages');
+const loginButton = document.querySelector('#loginButton');
 
-  const login = document.querySelector('#login');
-  const capsule = document.querySelector('#capsule');
-  const locked = document.querySelector('#locked');
-  const status = document.querySelector('#status');
-  const messages = document.querySelector('#messages');
-  const loginButton = document.querySelector('#loginButton');
+function showLocked() {
+  login.classList.add('hidden');
+  capsule.classList.add('hidden');
+  locked.classList.remove('hidden');
+}
 
-  function isOpenDate() {
-    return Date.now() >= OPEN_DATE.getTime();
+document.querySelector('#loginForm').addEventListener('submit', async e => {
+  e.preventDefault();
+  loginButton.disabled = true;
+  status.textContent = 'Входимо...';
+  try {
+    const { error } = await supabase.auth.signInWithPassword({
+      email: document.querySelector('#email').value.trim(),
+      password: document.querySelector('#password').value
+    });
+    if (error) throw error;
+    showLocked();
+    status.textContent = 'Вхід виконано. Можна відкрити капсулу.';
+  } catch (err) {
+    status.textContent = 'Не вдалося увійти: ' + err.message;
+  } finally {
+    loginButton.disabled = false;
   }
+});
 
-  function showLocked() {
-    login.classList.add('hidden');
-    capsule.classList.add('hidden');
-    locked.classList.remove('hidden');
-    status.textContent = '';
+document.querySelector('#openButton').addEventListener('click', async () => {
+  if (!confirm('Ти впевнена, що хочеш відкрити капсулу часу?')) return;
+  locked.classList.add('hidden');
+  capsule.classList.remove('hidden');
+  await loadMessages();
+});
+
+async function loadMessages() {
+  status.textContent = 'Завантажуємо послання...';
+  messages.replaceChildren();
+
+  const { data, error } = await supabase
+    .from('guest_messages')
+    .select('guest_name, message, file_paths, created_at')
+    .order('created_at', { ascending: true });
+
+  if (error) {
+    status.textContent = 'Не вдалося завантажити послання: ' + error.message;
+    return;
   }
-
-  document.querySelector('#loginForm').addEventListener('submit', async (e) => {
-    e.preventDefault();
-
-    if (!isOpenDate()) {
-      showLocked();
-      return;
-    }
-
-    loginButton.disabled = true;
-    status.textContent = 'Входимо...';
-
-    try {
-      const { error } = await supabase.auth.signInWithPassword({
-        email: document.querySelector('#email').value.trim(),
-        password: document.querySelector('#password').value
-      });
-      if (error) throw error;
-      await showCapsule();
-    } catch (err) {
-      status.textContent = 'Не вдалося увійти: ' + err.message;
-    } finally {
-      loginButton.disabled = false;
-    }
-  });
-
-  async function showCapsule() {
-    if (!isOpenDate()) {
-      showLocked();
-      return;
-    }
-
-    const { data: { session } } = await supabase.auth.getSession();
-
-    if (!session) {
-      login.classList.remove('hidden');
-      capsule.classList.add('hidden');
-      locked.classList.add('hidden');
-      return;
-    }
-
-    login.classList.add('hidden');
-    locked.classList.add('hidden');
-    capsule.classList.remove('hidden');
-    await loadMessages();
+  if (!data?.length) {
+    status.textContent = 'Послань поки немає.';
+    return;
   }
+  status.textContent = `Кількість послань: ${data.length}`;
 
-  async function loadMessages() {
-    if (!isOpenDate()) {
-      showLocked();
-      return;
-    }
+  for (const item of data) {
+    const details = document.createElement('details');
+    details.className = 'guest';
+    const summary = document.createElement('summary');
+    summary.textContent = item.guest_name || 'Гість без імені';
+    details.append(summary);
 
-    status.textContent = 'Завантажуємо послання...';
-    messages.replaceChildren();
+    const content = document.createElement('div');
+    content.className = 'guest-content';
+    const date = document.createElement('p');
+    date.className = 'muted';
+    date.textContent = item.created_at ? new Date(item.created_at).toLocaleString('uk-UA') : '';
+    content.append(date);
 
-    const { data, error } = await supabase
-      .from('guest_messages')
-      .select('guest_name, message, file_paths, created_at')
-      .order('created_at', { ascending: true });
+    const message = document.createElement('p');
+    message.textContent = item.message || 'Без текстового послання.';
+    content.append(message);
 
-    if (error) {
-      status.textContent = 'Не вдалося завантажити послання: ' + error.message;
-      return;
-    }
+    for (const path of (Array.isArray(item.file_paths) ? item.file_paths : [])) {
+      const { data: file, error: fileError } =
+        await supabase.storage.from('guest-media').createSignedUrl(path, 300);
 
-    if (!data?.length) {
-      status.textContent = 'Послань поки немає.';
-      return;
-    }
-
-    status.textContent = `Кількість послань: ${data.length}`;
-
-    for (const item of data) {
-      const details = document.createElement('details');
-      details.className = 'guest';
-
-      const summary = document.createElement('summary');
-      summary.textContent = item.guest_name || 'Гість без імені';
-      details.append(summary);
-
-      const content = document.createElement('div');
-      content.className = 'guest-content';
-
-      const date = document.createElement('p');
-      date.className = 'muted';
-      date.textContent = item.created_at
-        ? new Date(item.created_at).toLocaleString('uk-UA')
-        : '';
-      content.append(date);
-
-      const message = document.createElement('p');
-      message.textContent = item.message || 'Без текстового послання.';
-      content.append(message);
-
-      const paths = Array.isArray(item.file_paths) ? item.file_paths : [];
-
-      for (const path of paths) {
-        const { data: file, error: fileError } =
-          await supabase.storage.from('guest-media').createSignedUrl(path, 300);
-
-        if (fileError || !file?.signedUrl) {
-          const note = document.createElement('p');
-          note.className = 'muted';
-          note.textContent = 'Не вдалося відкрити вкладення.';
-          content.append(note);
-          continue;
-        }
-
-        const link = document.createElement('a');
-        link.className = 'file-link';
-        link.href = file.signedUrl;
-        link.target = '_blank';
-        link.rel = 'noopener noreferrer';
-        link.textContent = 'Відкрити вкладення';
-        content.append(link);
-
-        if (/\.(png|jpe?g|gif|webp|avif)(\?|$)/i.test(path)) {
-          const img = document.createElement('img');
-          img.src = file.signedUrl;
-          img.alt = 'Фото від гостя';
-          img.loading = 'lazy';
-          content.append(img);
-        }
+      if (fileError || !file?.signedUrl) {
+        const note = document.createElement('p');
+        note.className = 'muted';
+        note.textContent = 'Не вдалося відкрити вкладення.';
+        content.append(note);
+        continue;
       }
 
-      details.append(content);
-      messages.append(details);
+      const link = document.createElement('a');
+      link.className = 'file-link';
+      link.href = file.signedUrl;
+      link.target = '_blank';
+      link.rel = 'noopener noreferrer';
+      link.textContent = 'Відкрити вкладення';
+      content.append(link);
+
+      if (/\.(png|jpe?g|gif|webp|avif)(\?|$)/i.test(path)) {
+        const img = document.createElement('img');
+        img.src = file.signedUrl;
+        img.alt = 'Фото від гостя';
+        img.loading = 'lazy';
+        content.append(img);
+      }
     }
+    details.append(content);
+    messages.append(details);
   }
+}
 
-  document.querySelector('#refreshButton')
-    .addEventListener('click', loadMessages);
+document.querySelector('#refreshButton').addEventListener('click', loadMessages);
+document.querySelector('#closeButton').addEventListener('click', showLocked);
 
-  document.querySelector('#logoutButton').addEventListener('click', async () => {
-    await supabase.auth.signOut();
+document.querySelector('#logoutButton').addEventListener('click', async () => {
+  await supabase.auth.signOut();
+  messages.replaceChildren();
+  login.classList.remove('hidden');
+  capsule.classList.add('hidden');
+  locked.classList.add('hidden');
+  status.textContent = 'Ви вийшли з акаунта.';
+});
+
+supabase.auth.onAuthStateChange((_event, session) => {
+  if (!session) {
     messages.replaceChildren();
     capsule.classList.add('hidden');
-    if (isOpenDate()) login.classList.remove('hidden');
-    else showLocked();
-    status.textContent = 'Ви вийшли з акаунта.';
-  });
-
-  supabase.auth.onAuthStateChange((_event, session) => {
-    if (!session) {
-      messages.replaceChildren();
-      capsule.classList.add('hidden');
-      if (isOpenDate()) login.classList.remove('hidden');
-      else showLocked();
-    }
-  });
-
-  if (!isOpenDate()) {
-    showLocked();
-  } else {
-    await showCapsule();
+    locked.classList.add('hidden');
+    login.classList.remove('hidden');
   }
+});
+
+const { data: { session } } = await supabase.auth.getSession();
+if (session) showLocked();
 </script>
 </body>
 </html>
