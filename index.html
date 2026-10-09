@@ -1,231 +1,230 @@
+
 <!DOCTYPE html>
 <html lang="uk">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#f8f3eb">
-  <title>Наша капсула часу ♡</title>
-  <style>
-    * { box-sizing: border-box; }
-
-    body {
-      margin: 0;
-      min-height: 100vh;
-      font-family: Georgia, "Times New Roman", serif;
-      color: #51443c;
-      background:
-        radial-gradient(ellipse at top, #fffdf8, transparent 70%),
-        #f3e9dc;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      padding: 28px 16px;
-    }
-
-    .card {
-      width: 100%;
-      max-width: 540px;
-      background: rgba(255, 253, 248, .94);
-      border: 1px solid #e6d5bd;
-      border-radius: 5px;
-      padding: 38px 28px;
-      text-align: center;
-      box-shadow: 0 18px 60px #7c604a12;
-    }
-
-    .ornament {
-      color: #b59a70;
-      font-size: 24px;
-      letter-spacing: 10px;
-    }
-
-    .eyebrow {
-      margin-top: 20px;
-      font: 11px Arial, sans-serif;
-      letter-spacing: 3px;
-      text-transform: uppercase;
-      color: #9d8464;
-    }
-
-    h1 {
-      font-size: clamp(32px, 8vw, 45px);
-      font-weight: normal;
-      line-height: 1.15;
-      margin: 17px 0 10px;
-    }
-
-    .names {
-      font-size: 23px;
-      font-style: italic;
-      color: #9c795d;
-    }
-
-    .date {
-      margin: 18px 0;
-      font: 12px Arial, sans-serif;
-      letter-spacing: 2px;
-      color: #9b8876;
-    }
-
-    .intro {
-      font-size: 16px;
-      line-height: 1.8;
-      margin: 24px 0;
-    }
-
-    .divider {
-      color: #c5a981;
-      margin: 24px 0;
-    }
-
-    label {
-      display: block;
-      text-align: left;
-      font-size: 14px;
-      margin: 18px 0 8px;
-    }
-
-    input, textarea {
-      width: 100%;
-      padding: 13px 14px;
-      border: 1px solid #e2d3c0;
-      border-radius: 3px;
-      background: #fffefa;
-      color: #51443c;
-      font: 15px Arial, sans-serif;
-      outline-color: #b59a70;
-    }
-
-    textarea {
-      min-height: 150px;
-      resize: vertical;
-      line-height: 1.6;
-    }
-
-    button {
-      width: 100%;
-      border: 0;
-      padding: 15px 18px;
-      margin-top: 22px;
-      background: #a58a68;
-      color: white;
-      font: 14px Arial, sans-serif;
-      letter-spacing: .5px;
-      cursor: pointer;
-      transition: background .2s;
-    }
-
-    button:hover { background: #876c4f; }
-    button:disabled { opacity: .6; cursor: wait; }
-
-    .small {
-      font: 12px/1.7 Arial, sans-serif;
-      color: #988779;
-      margin-top: 22px;
-    }
-
-    #status {
-      margin-top: 18px;
-      font: 14px/1.6 Arial, sans-serif;
-    }
-
-    .heart { color: #bd927e; }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Наша капсула часу ♡</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;min-height:100vh;padding:24px 14px;background:#f3e9dc;color:#51443c;font-family:Georgia,serif;display:flex;justify-content:center;align-items:center}
+.card{width:100%;max-width:560px;padding:36px 26px;background:#fffdf8;border:1px solid #e6d5bd;text-align:center;box-shadow:0 18px 60px #7c604a12}
+.ornament{color:#b59a70;font-size:24px;letter-spacing:8px}
+.eyebrow{margin-top:18px;font:11px Arial;letter-spacing:3px;color:#9d8464}
+h1{font-size:clamp(32px,8vw,45px);font-weight:normal;margin:16px 0 8px}
+.names{font-size:23px;font-style:italic;color:#9c795d}
+.date{margin:18px;font:12px Arial;letter-spacing:2px;color:#9b8876}
+p{line-height:1.8}
+label{display:block;text-align:left;font-size:14px;margin:18px 0 8px}
+input[type=text],textarea{width:100%;padding:13px;border:1px solid #e2d3c0;background:#fffefa;color:#51443c;font:15px Arial}
+textarea{min-height:130px;resize:vertical}
+input[type=file]{width:100%;font:13px Arial}
+.hint{font:12px/1.6 Arial;color:#958373;text-align:left}
+button{border:0;padding:13px 16px;background:#a58a68;color:white;font:14px Arial;cursor:pointer}
+button:disabled{opacity:.5}
+.primary{width:100%;margin-top:22px}
+.secondary{margin:8px 5px 0}
+#status{font:14px/1.6 Arial;margin-top:16px;overflow-wrap:anywhere}
+#preview{font:13px Arial;text-align:left;line-height:1.8}
+.small{font:12px/1.7 Arial;color:#988779;margin-top:24px}
+</style>
 </head>
 <body>
-  <main class="card">
-    <div class="ornament">✧ ♡ ✧</div>
-    <div class="eyebrow">Наша історія триває</div>
+<main class="card">
+  <div class="ornament">✧ ♡ ✧</div>
+  <div class="eyebrow">НАША ІСТОРІЯ ТРИВАЄ</div>
+  <h1>Капсула часу</h1>
+  <div class="names">Лілія &amp; Вова</div>
+  <div class="date">10.10.2026 — 10.10.2030</div>
 
-    <h1>Капсула часу</h1>
-    <div class="names">Лілія & Вова</div>
+  <p>Через чотири роки ми відкриємо цю скриньку, щоб прочитати ваші слова, почути ваші голоси та згадати цей особливий день.</p>
+  <p style="color:#b59a70">— ✧ —</p>
+  <p>Залиште нам послання в майбутнє ♡</p>
 
-    <div class="date">10.10.2026 — 10.10.2030</div>
+  <form id="messageForm">
+    <label for="name">Від кого ваше послання?</label>
+    <input id="name" type="text" maxlength="100" placeholder="Ваше ім’я" required>
 
-    <p class="intro">
-      Чотири роки промайнуть, і ми відкриємо цю скриньку,
-      щоб знову почути ваші голоси, прочитати ваші слова
-      та згадати цей особливий день.
-    </p>
+    <label for="message">Ваші слова для нас</label>
+    <textarea id="message" maxlength="5000" placeholder="Пишіть усе, що хочете залишити нам на згадку..." required></textarea>
 
-    <div class="divider">— ✧ —</div>
+    <label for="files">Додайте фото, відео або аудіофайл</label>
+    <input id="files" type="file" accept="image/jpeg,image/png,image/webp,image/gif,video/mp4,video/webm,video/quicktime,audio/webm,audio/mp4,audio/mpeg,audio/ogg,audio/wav,audio/x-m4a" multiple>
+    <p class="hint">До 5 файлів, кожен до 25 МБ. Відео з телефона можуть бути завеликими — за потреби зменште їхній розмір.</p>
+    <div id="preview"></div>
 
-    <p>Залиште нам кілька слів у майбутнє <span class="heart">♡</span></p>
+    <section style="border-top:1px solid #e6d5bd;margin-top:22px;padding-top:12px">
+      <label>Або запишіть голосове послання 🎙️</label>
+      <button type="button" class="secondary" id="record">● Записати</button>
+      <button type="button" class="secondary" id="stop" disabled>Зупинити</button>
+      <p id="recordStatus" class="hint" aria-live="polite">Для запису дозвольте браузеру доступ до мікрофона.</p>
+      <audio id="audioPreview" controls hidden style="width:100%;margin-top:10px"></audio>
+      <button type="button" class="secondary" id="removeAudio" hidden>Видалити запис</button>
+    </section>
 
-    <form id="messageForm">
-      <label for="name">Від кого ваше послання?</label>
-      <input id="name" name="name" maxlength="100"
-        placeholder="Ваше ім’я" required>
+    <button class="primary" id="submitButton" type="submit">Запечатати послання ♡</button>
+  </form>
 
-      <label for="message">Ваші слова для нас</label>
-      <textarea id="message" name="message" maxlength="5000"
-        placeholder="Пишіть усе, що хочете залишити нам на згадку..."
-        required></textarea>
+  <div id="status" role="status" aria-live="polite"></div>
+  <p class="small">Дякуємо, що стали частиною нашої історії.<br>З любов’ю, Лілія та Вова ♡</p>
+</main>
 
-      <button id="submitButton" type="submit">
-        Запечатати послання ♡
-      </button>
-    </form>
+<script>
+const SUPABASE_URL = "ВСТАВТЕ_PROJECT_URL";
+const SUPABASE_ANON_KEY = "ВСТАВТЕ_ANON_KEY";
 
-    <div id="status" role="status" aria-live="polite"></div>
+const form = document.getElementById("messageForm");
+const filesInput = document.getElementById("files");
+const preview = document.getElementById("preview");
+const status = document.getElementById("status");
+const submitButton = document.getElementById("submitButton");
+const recordButton = document.getElementById("record");
+const stopButton = document.getElementById("stop");
+const recordStatus = document.getElementById("recordStatus");
+const audioPreview = document.getElementById("audioPreview");
+const removeAudio = document.getElementById("removeAudio");
 
-    <p class="small">
-      Дякуємо, що стали частиною нашої історії.<br>
-      З любов’ю, Лілія та Вова
-    </p>
-  </main>
+let recorder = null;
+let stream = null;
+let audioBlob = null;
+let audioUrl = null;
+let chunks = [];
 
-  <script>
-    // Вставте свої значення з налаштувань Supabase.
-    const SUPABASE_URL = "https://xpajympmqhaeovhkkana.supabase.co";
-    const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhwYWp5bXBtcWhhZW92aGtrYW5hIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE1MzE0NjcsImV4cCI6MjEwNzEwNzQ2N30.2PoKYpD1Gj0SrnLtOEP4gp8skOciCTmJphn_9J1b8PQ";
+filesInput.addEventListener("change", () => {
+  const files = [...filesInput.files];
+  preview.textContent = "";
 
-    const form = document.getElementById("messageForm");
-    const button = document.getElementById("submitButton");
-    const status = document.getElementById("status");
+  if (files.length > 5 || files.some(f => f.size > 25 * 1024 * 1024)) {
+    preview.textContent = "Оберіть до 5 файлів, кожен не більше 25 МБ.";
+    filesInput.value = "";
+    return;
+  }
 
-    form.addEventListener("submit", async (event) => {
-      event.preventDefault();
+  files.forEach(file => {
+    const item = document.createElement("div");
+    item.textContent = `📎 ${file.name} (${(file.size / 1024 / 1024).toFixed(1)} МБ)`;
+    preview.appendChild(item);
+  });
+});
 
-      const name = document.getElementById("name").value.trim();
-      const message = document.getElementById("message").value.trim();
+recordButton.addEventListener("click", async () => {
+  if (!navigator.mediaDevices?.getUserMedia || !window.MediaRecorder) {
+    recordStatus.textContent = "Запис недоступний у цьому браузері. Спробуйте завантажити аудіофайл.";
+    return;
+  }
 
-      if (!name || !message) return;
+  try {
+    stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+    chunks = [];
 
-      button.disabled = true;
-      status.textContent = "Запечатуємо ваше послання…";
+    const mime = ["audio/webm;codecs=opus", "audio/webm", "audio/mp4"]
+      .find(type => MediaRecorder.isTypeSupported(type));
 
-      try {
-        const response = await fetch(
-          `${SUPABASE_URL}/functions/v1/submit-message`,
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-              "apikey": SUPABASE_ANON_KEY,
-              "Authorization": `Bearer ${SUPABASE_ANON_KEY}`
-            },
-            body: JSON.stringify({ name, message })
-          }
-        );
+    recorder = new MediaRecorder(stream, mime ? { mimeType: mime } : {});
+    recorder.ondataavailable = event => {
+      if (event.data.size) chunks.push(event.data);
+    };
 
-        const result = await response.json();
+    recorder.onstop = () => {
+      audioBlob = new Blob(chunks, { type: recorder.mimeType || "audio/webm" });
 
-        if (!response.ok || !result.success) {
-          throw new Error(result.error || "Помилка збереження.");
-        }
+      if (audioUrl) URL.revokeObjectURL(audioUrl);
+      audioUrl = URL.createObjectURL(audioBlob);
+      audioPreview.src = audioUrl;
+      audioPreview.hidden = false;
+      removeAudio.hidden = false;
+      recordStatus.textContent = "Запис готовий. Прослухайте його перед відправленням.";
 
-        form.reset();
-        status.textContent =
-          "♡ Ваше послання збережено. Дякуємо за теплі слова!";
-      } catch (error) {
-        status.textContent =
-          "Не вдалося зберегти послання. Спробуйте ще раз трохи пізніше.";
-        console.error(error);
-      } finally {
-        button.disabled = false;
+      stream?.getTracks().forEach(track => track.stop());
+      stream = null;
+    };
+
+    recorder.start();
+    recordButton.disabled = true;
+    stopButton.disabled = false;
+    recordStatus.textContent = "Запис триває…";
+  } catch {
+    recordStatus.textContent = "Не вдалося отримати доступ до мікрофона.";
+  }
+});
+
+stopButton.addEventListener("click", () => {
+  if (recorder?.state === "recording") recorder.stop();
+  recordButton.disabled = false;
+  stopButton.disabled = true;
+});
+
+removeAudio.addEventListener("click", () => {
+  audioBlob = null;
+  audioPreview.pause();
+  audioPreview.hidden = true;
+  removeAudio.hidden = true;
+  if (audioUrl) URL.revokeObjectURL(audioUrl);
+  audioUrl = null;
+  recordStatus.textContent = "Запис видалено.";
+});
+
+form.addEventListener("submit", async event => {
+  event.preventDefault();
+
+  if (SUPABASE_URL.includes("https://xpajympmqhaeovhkkana.supabase.co") || SUPABASE_ANON_KEY.includes("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhwYWp5bXBtcWhhZW92aGtrYW5hIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE1MzE0NjcsImV4cCI6MjEwNzEwNzQ2N30.2PoKYpD1Gj0SrnLtOEP4gp8skOciCTmJphn_9J1b8PQ")) {
+    status.textContent = "Спочатку налаштуйте підключення до Supabase.";
+    return;
+  }
+
+  const files = [...filesInput.files];
+  if (files.length + (audioBlob ? 1 : 0) > 5) {
+    status.textContent = "Можна надіслати не більше 5 файлів разом із голосовим.";
+    return;
+  }
+
+  if (files.some(f => f.size > 25 * 1024 * 1024) ||
+      (audioBlob && audioBlob.size > 25 * 1024 * 1024)) {
+    status.textContent = "Кожен файл має бути меншим за 25 МБ.";
+    return;
+  }
+
+  const data = new FormData();
+  data.append("name", document.getElementById("name").value.trim());
+  data.append("message", document.getElementById("message").value.trim());
+
+  files.forEach(file => data.append("files", file));
+  if (audioBlob) {
+    const ext = audioBlob.type.includes("mp4") ? "mp4" : "webm";
+    data.append("files", audioBlob, `voice-message.${ext}`);
+  }
+
+  submitButton.disabled = true;
+  status.textContent = "Запечатуємо ваше послання…";
+
+  try {
+    const response = await fetch(
+      `${SUPABASE_URL.replace(/\/$/, "")}/functions/v1/submit-message`,
+      {
+        method: "POST",
+        headers: {
+          "apikey": SUPABASE_ANON_KEY,
+          "Authorization": `Bearer ${SUPABASE_ANON_KEY}`
+        },
+        body: data
       }
-    });
-  </script>
+    );
+
+    const result = await response.json();
+    if (!response.ok || !result.success) {
+      throw new Error(result.error || `Помилка ${response.status}`);
+    }
+
+    form.reset();
+    preview.textContent = "";
+    removeAudio.click();
+    status.textContent = "♡ Ваше послання збережено. Дякуємо за теплі слова!";
+  } catch (error) {
+    status.textContent = error.message || "Не вдалося зберегти послання. Спробуйте ще раз.";
+  } finally {
+    submitButton.disabled = false;
+  }
+});
+</script>
 </body>
 </html>
