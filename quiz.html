@@ -13,4 +13,278 @@
       padding: 24px 14px;
       font-family: Georgia, serif;
       background: #f8f1eb;
-      color: #
+      color: #51413d;
+    }
+
+    .container {
+      max-width: 650px;
+      margin: auto;
+      padding: 28px 22px;
+      background: #fffdfb;
+      border-radius: 18px;
+      box-shadow: 0 5px 25px #6b51421a;
+    }
+
+    h1 {
+      text-align: center;
+      font-size: 29px;
+      font-weight: normal;
+      line-height: 1.3;
+    }
+
+    .subtitle {
+      text-align: center;
+      line-height: 1.6;
+      color: #8b7168;
+    }
+
+    label.name-label {
+      display: block;
+      margin: 25px 0 8px;
+    }
+
+    input[type="text"] {
+      width: 100%;
+      padding: 13px;
+      border: 1px solid #dfcec4;
+      border-radius: 9px;
+      font-size: 16px;
+    }
+
+    .question {
+      padding: 18px 0;
+      border-bottom: 1px solid #eee2da;
+    }
+
+    .question p {
+      font-size: 18px;
+      line-height: 1.45;
+      margin: 0 0 13px;
+    }
+
+    .option {
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+      padding: 10px;
+      margin: 6px 0;
+      border: 1px solid #eee2da;
+      border-radius: 9px;
+      cursor: pointer;
+      font-family: Arial, sans-serif;
+      font-size: 15px;
+      line-height: 1.4;
+    }
+
+    .option:has(input:checked) {
+      background: #f5e8df;
+      border-color: #b98d79;
+    }
+
+    button {
+      width: 100%;
+      padding: 14px;
+      margin-top: 18px;
+      border: 0;
+      border-radius: 10px;
+      background: #987263;
+      color: white;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    button:disabled { opacity: 0.6; }
+
+    #result, #leaderboard {
+      display: none;
+      margin-top: 22px;
+      padding: 18px;
+      border-radius: 12px;
+      background: #f8f1eb;
+      line-height: 1.6;
+    }
+
+    .hint {
+      font-size: 13px;
+      color: #8b7168;
+      text-align: center;
+    }
+
+    ol { padding-left: 23px; }
+  </style>
+</head>
+<body>
+  <main class="container">
+    <h1>Наскільки добре ви знаєте пару?</h1>
+    <p class="subtitle">
+      Перевірте, наскільки добре ви знаєте Лілію та Вову!
+    </p>
+
+    <label class="name-label" for="guestName">Ваше ім’я</label>
+    <input id="guestName" type="text" maxlength="60"
+      placeholder="Як до вас звертатися?">
+
+    <form id="quizForm">
+      <div id="questions"></div>
+      <button type="submit" id="submitBtn">Завершити вікторину</button>
+    </form>
+
+    <section id="result"></section>
+
+    <button id="leaderboardBtn" type="button" style="display:none">
+      Переглянути таблицю
+    </button>
+
+    <section id="leaderboard"></section>
+    <p class="hint">Лілія &amp; Вова · 10.10.2026</p>
+  </main>
+
+  <script>
+    /*
+      Перед публікацією додамо остаточні питання,
+      правильні відповіді та безпечне збереження результатів.
+    */
+
+    const questions = [
+      {
+        text: "Хто першим запропонував жити разом?",
+        options: ["Ліля", "Вова", "Вирішили разом"],
+        correct: 1
+      },
+      {
+        text: "Хто більш перебірливий у їжі?",
+        options: ["Ліля", "Вова", "Обоє однаково"],
+        correct: 0
+      },
+      {
+        text: "Хто частіше забуває, куди поклав телефон?",
+        options: ["Ліля", "Вова", "Обоє однаково"],
+        correct: 0
+      },
+      {
+        text: "Хто спокійніше реагує на стрес?",
+        options: ["Ліля", "Вова", "Обоє однаково"],
+        correct: 1
+      },
+      {
+        text: "Хто частіше засинає під час перегляду фільму?",
+        options: ["Ліля", "Вова", "Обоє однаково"],
+        correct: 0
+      },
+      {
+        text: "Хто частіше пропонує замовити їжу?",
+        options: ["Ліля", "Вова", "Обоє"],
+        correct: 2
+      },
+      {
+        text: "Хто першим помічає, що інший засмутився?",
+        options: ["Ліля", "Вова", "Обоє одночасно"],
+        correct: 0
+      },
+      {
+        text: "Хто частіше просить іншого допомогти з вибором?",
+        options: ["Ліля", "Вова", "Обоє"],
+        correct: 0
+      },
+      {
+        text: "Хто запросив іншого на першу прогулянку?",
+        options: ["Ліля", "Вова", "Це сталося випадково"],
+        correct: 1
+      },
+      {
+        text: "Хто довше проводить часу у ванній?",
+        options: ["Ліля", "Вова", "Приблизно однаково"],
+        correct: 2
+      },
+      {
+        text: "Хто частіше запізнюється?",
+        options: ["Ліля", "Вова", "Обоє"],
+        correct: 0
+      },
+      {
+        text: "Хто романтичніший?",
+        options: ["Ліля", "Вова", "Обоє по-своєму"],
+        correct: 0
+      },
+      {
+        text: "Хто більш емоційний?",
+        options: ["Ліля", "Вова", "Обоє однаково"],
+        correct: 0
+      }
+    ];
+
+    const questionsBox = document.getElementById("questions");
+
+    questions.forEach((q, i) => {
+      const section = document.createElement("section");
+      section.className = "question";
+
+      const title = document.createElement("p");
+      title.textContent = `${i + 1}. ${q.text}`;
+      section.appendChild(title);
+
+      q.options.forEach((option, j) => {
+        const label = document.createElement("label");
+        label.className = "option";
+
+        const radio = document.createElement("input");
+        radio.type = "radio";
+        radio.name = `q${i}`;
+        radio.value = j;
+        radio.required = true;
+
+        const text = document.createElement("span");
+        text.textContent = option;
+
+        label.append(radio, text);
+        section.appendChild(label);
+      });
+
+      questionsBox.appendChild(section);
+    });
+
+    document.getElementById("quizForm").addEventListener("submit", (event) => {
+      event.preventDefault();
+
+      const name = document.getElementById("guestName").value.trim();
+      if (!name) {
+        alert("Будь ласка, введіть своє ім’я.");
+        document.getElementById("guestName").focus();
+        return;
+      }
+
+      const answers = {};
+      let score = 0;
+
+      questions.forEach((q, i) => {
+        const selected = document.querySelector(`input[name="q${i}"]:checked`);
+        answers[i] = Number(selected.value);
+        if (answers[i] === q.correct) score++;
+      });
+
+      const result = document.getElementById("result");
+      result.style.display = "block";
+      result.textContent =
+        `${name}, ваш результат: ${score} із ${questions.length} балів!`;
+
+      /*
+        Збереження в Supabase підключимо після перевірки
+        остаточних питань і правильних відповідей.
+      */
+
+      document.getElementById("quizForm").style.display = "none";
+      document.getElementById("leaderboardBtn").style.display = "block";
+      result.scrollIntoView({ behavior: "smooth" });
+    });
+
+    document.getElementById("leaderboardBtn").addEventListener("click", () => {
+      const board = document.getElementById("leaderboard");
+      board.style.display = "block";
+      board.textContent =
+        "Таблицю результатів підключимо до Supabase наступним кроком.";
+      board.scrollIntoView({ behavior: "smooth" });
+    });
+  </script>
+</body>
+</html>
+```
